@@ -1,0 +1,55 @@
+<!-- TODO
+ - Responsive Logo image
+ - Optimize for mobile
+ - Call weather from FCC api
+ - Celcius/Fahrenheit switch
+ - Jacket switch
+ !-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Local Weather</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css'>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    var query = 'weather,dark';
+    var output = $.ajax({
+    url: 'https://api.unsplash.com/photos/random/?client_id=cfe83d0d0111ded41f664d1de5b94ecf0551c60acdc56acd176fb9ed246bb81e'+'&query="'+query+'"',
+    type: 'GET',
+    dataType: 'json',
+    success: function(data) {
+      image = data.urls.regular;
+      $('body').css('background-image',"url("+image+")");
+    },
+
+  });
+  });
+  </script>
+
+</head>
+
+<body>
+<div class="container mt-5">
+<div class="row">
+<div class="col"><img id="logo" class="lshadow" src="images/lw.png"/></div>
+<div class="col"><h2 class="ml-3 lshadow" id="logotext">Local Weather.</h2></div>
+</div>
+  <hr>
+  <div class="row mt-5">
+    <div class="col">
+      <h2 class="weathertext">Toronto, ON is currently <span>22˚</span> Celcius and the weather condition is <span>Cloudy</span>. Wind speed is <span>8.12km/h</span>. You should probably wear a jacket.</h2>
+    </div>
+  </div>
+  <p class="credit"><strong>Celcius</strong>/Fahrenheit<br>
+  Made by <a href="http://calumpatrick.com" id="underline">Calum Patrick.</a></p>
+  </div>
+</body>
+
+</html>
