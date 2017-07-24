@@ -1,63 +1,57 @@
 body {
-  background-image: ;
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  background-color: #464646;
+  background-color: #111;
 }
 
 #logo {
-  margin-left: 20px;
-  margin-top: 20px;
-  float: left;
-}
-
-#logotext {
-  font-size: 53px;
-  color: #fff;
-  font-family: 'Montserrat', sans-serif;
-  margin-top: 10px;
-  margin-bottom: 0px;
-  float: right;
+  margin-bottom: 10px;
 }
 
 .lshadow {
-  -webkit-filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.3));
-  filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.3));
+  -webkit-filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.2));
 }
 
 hr {
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255,255,255,0.2);
   height: 2px;
 }
 
 .weathertext {
   color: #fff;
   font-family: 'Montserrat', sans-serif;
-  font-size: 30px;
+  font-weight: 700;
+  font-size: 40px;
   line-height: 150%;
 
 }
 
-.weathertext span {
-  font-size: 35px;
-  border-bottom: 2px solid white;
-}
-
 .credit {
   color: white;
-  position: fixed;
-  bottom: 0;
 }
 
+.br {
+  text-align: right;
+}
 
-#underline {
+.underline {
   border-bottom: 2px solid white;
   color: inherit;
   text-decoration: inherit;
 }
 
 .container {
-  height:100vh;
+  height: 85vh;
+}
+
+.container.credit {
+  height: 50px;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
 }

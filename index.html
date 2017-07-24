@@ -1,15 +1,12 @@
 <!-- TODO
- - Responsive Logo image
- - Optimize for mobile
- - Call weather from FCC api
- - Celcius/Fahrenheit switch
- - Jacket switch
+ - Fix mobile
  !-->
 
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Local Weather</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css'>
@@ -18,19 +15,87 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
   <script type="text/javascript">
+
+  var api = "https://fcc-weather-api.glitch.me/api/current?";
+  var lat, lon;
+  var tempUnit = 'Celcius';
+  var currentTempInCelsius;
+  var sentence = "<span id=\"city\"></span>, <span id=\"country\"></span> is currently <span class=\"underline\" id=\"temp\"></span>˚ <span id=\"tempunit\">Celcius</span> and the weather condition is <span class=\"underline\" id=\"desc\"></span>. Wind speed is <span class=\"underline\" id=\"speed\"></span> km/h."
+
   $(document).ready(function(){
-    var query = 'weather,dark';
-    var output = $.ajax({
-    url: 'https://api.unsplash.com/photos/random/?client_id=cfe83d0d0111ded41f664d1de5b94ecf0551c60acdc56acd176fb9ed246bb81e'+'&query="'+query+'"',
+
+
+  // FCC WEATHER API
+
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      var lat="lat="+position.coords.latitude;
+      var lon="lon="+position.coords.longitude;
+      getWeather(lat, lon);
+    });
+  }
+  $("#toggle").click(function () {
+    var currentTempUnit = $("#tempunit").text();
+    var newTempUnit = currentTempUnit == "Celcius" ? "Fahrenheit" : "Celcius";
+    if (newTempUnit == "Fahrenheit") {
+      var fahTemp = Math.round(parseInt($("#temp").text()) * 9 / 5 + 32);
+      $("#temp").text(fahTemp);
+      $("#tempunit").text(newTempUnit);
+      $('#toggle').html("Celcius/<strong>Fahrenheit</strong>")
+
+    } else {
+      $("#temp").text(currentTempInCelsius);
+      $("#tempunit").text(newTempUnit);
+      $('#toggle').html("<strong>Celcius</strong>/Fahrenheit")
+
+    }
+  });
+
+  });
+
+  function getWeather(lat, lon) {
+  var urlString = "https://fcc-weather-api.glitch.me/api/current?" + lat + "&" + lon;
+  $.ajax({
+    url: urlString, success: function (result) {
+      currentTempInCelsius = Math.round(result.main.temp * 10) / 10;
+      var speed = result.wind.speed;
+      var desc = result.weather[0].main;
+      if (currentTempInCelsius>18 && speed<10 && desc!== "Rain") {
+        sentence+=" You don't need a jacket.";
+      } else {
+        sentence+=" You should probably wear a jacket.";
+      }
+      $('.weathertext').html(sentence);
+      $("#city").text(result.name);
+      $("#country").text(result.sys.country);
+      $("#temp").text(currentTempInCelsius);
+      $("#tempunit").text(tempUnit);
+      $("#desc").text(desc);
+      $("#speed").text(speed);
+      getWall(desc)
+    }
+  });
+}
+
+  function getWall(query) {
+    var wdata = 'dark,'+query;
+    // UNSPLASH API
+    var imgoutput = $.ajax({
+    url: 'https://api.unsplash.com/photos/random/?client_id=cfe83d0d0111ded41f664d1de5b94ecf0551c60acdc56acd176fb9ed246bb81e'+'&query="'+wdata+'"',
     type: 'GET',
     dataType: 'json',
     success: function(data) {
       image = data.urls.regular;
+      author = data.user.name;
+      profile = data.user.username;
       $('body').css('background-image',"url("+image+")");
+      $('.auth').html(author)
+      $(".auth").attr("href", "https://unsplash.com/@"+profile+"?utm_source=LocalWeather&utm_medium=referral&utm_campaign=api-credit")
     },
+  });
+  }
 
-  });
-  });
   </script>
 
 </head>
@@ -38,17 +103,25 @@
 <body>
 <div class="container mt-5">
 <div class="row">
-<div class="col"><img id="logo" class="lshadow" src="images/lw.png"/></div>
-<div class="col"><h2 class="ml-3 lshadow" id="logotext">Local Weather.</h2></div>
+<div class="col" align="center"><img id="logo" class="lshadow" src="images/lw.png"/></div>
 </div>
   <hr>
   <div class="row mt-5">
     <div class="col">
-      <h2 class="weathertext">Toronto, ON is currently <span>22˚</span> Celcius and the weather condition is <span>Cloudy</span>. Wind speed is <span>8.12km/h</span>. You should probably wear a jacket.</h2>
+      <h2 class="weathertext">Loading...</h2>
     </div>
   </div>
-  <p class="credit"><strong>Celcius</strong>/Fahrenheit<br>
-  Made by <a href="http://calumpatrick.com" id="underline">Calum Patrick.</a></p>
+</div>
+  <div class="container credit">
+  <div class="row">
+    <div class="col">
+      <p><a href="#"><span id="toggle"><strong>Celcius</strong>/Fahrenheit</span></a><br>
+      Made by <a href="http://calumpatrick.com" class="underline">Calum Patrick.</a></p>
+    </div>
+    <div class="col">
+      <br><p class="br">Image by <a href="#" class="auth underline"></a> / <a href="https://unsplash.com?utm_source=LocalWeather&utm_medium=referral&utm_campaign=api-credit" class="underline">Unsplash</p>
+    </div>
+    </div>
   </div>
 </body>
 
