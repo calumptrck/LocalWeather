@@ -81,8 +81,13 @@
   function getWall(query) {
     var wdata = 'dark,'+query;
     // UNSPLASH API
+    if (query === "Clear") {
+      var cURL = 'https://api.unsplash.com/photos/random/?client_id=cfe83d0d0111ded41f664d1de5b94ecf0551c60acdc56acd176fb9ed246bb81e&query=dark,weather';
+    } else {
+      var cURL = 'https://api.unsplash.com/photos/random/?client_id=cfe83d0d0111ded41f664d1de5b94ecf0551c60acdc56acd176fb9ed246bb81e'+'&query="'+wdata+'"';
+    }
     var imgoutput = $.ajax({
-    url: 'https://api.unsplash.com/photos/random/?client_id=cfe83d0d0111ded41f664d1de5b94ecf0551c60acdc56acd176fb9ed246bb81e'+'&query="'+wdata+'"',
+    url: cURL,
     type: 'GET',
     dataType: 'json',
     success: function(data) {
