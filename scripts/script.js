@@ -5,18 +5,45 @@
   var currentTempInCelsius;
   var sentence = "<span id=\"city\"></span>, <span id=\"country\"></span> is currently <span class=\"underline\" id=\"temp\"></span>˚ <span id=\"tempunit\">Celcius</span> and the weather condition is <span class=\"underline\" id=\"desc\"></span>. Wind speed is <span class=\"underline\" id=\"speed\"></span> km/h."
 
+  function setCookie(cname, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      var expires = "expires="+d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+
+  function getCookie(cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for(var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+          }
+      }
+      return "";
+  }
+
   $(document).ready(function(){
 
 
   // FCC WEATHER API
 
 
-  if (navigator.geolocation) {
+  if (getCookie("uLocation")=="") {
     navigator.geolocation.getCurrentPosition(function (position) {
       var lat="lat="+position.coords.latitude;
       var lon="lon="+position.coords.longitude;
-      getWeather(lat, lon);
+      setCookie("uLocation",[lat,lon],7)
+      var coords = getCookie("uLocation").split(",")
+      getWeather(coords[0],coords[1]);
     });
+  } else {
+    var coords = getCookie("uLocation").split(",")
+    getWeather(coords[0],coords[1]);
   }
   $("#toggle").click(function () {
     var currentTempUnit = $("#tempunit").text();
