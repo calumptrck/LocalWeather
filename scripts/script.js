@@ -76,6 +76,7 @@
       } else {
         sentence+=" You should probably wear a jacket.";
       }
+      $('.spinner').remove();
       $('.weathertext').html(sentence);
       $("#city").text(result.name);
       $("#country").text(result.sys.country);
