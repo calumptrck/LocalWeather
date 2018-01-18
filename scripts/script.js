@@ -57,7 +57,7 @@
     } else {
       $("#temp").text(currentTempInCelsius);
       $("#tempunit").text(newTempUnit);
-      $('#toggle').html("<strong>Celcius</strong>/Fahrenheit")
+      $('#toggle').html("<strong>Celsius</strong>/Fahrenheit")
 
     }
   });
